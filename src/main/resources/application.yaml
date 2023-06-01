@@ -1,40 +1,24 @@
 server:
-  port: 8082
+  port: 8081
 
 spring:
   application:
-    name: service-a
-  mvc:
-    servlet:
-      path: /open-feign-observability
-
-client:
-  observability:
-    uri: http://localhost:8081/observability
+    name: app-open-feign-observability
 
 management:
   tracing:
     sampling:
-      #Garante que o Micrometer rastreie 100% (probabilidade de 1.0) das ações.
-      #Por padrão, o Micrômetro rastreia apenas uma fração do tempo, por exemplo, 10% (probabilidade de 0,1).
       probability: 1.0
-  endpoint:
-    health:
-      probes:
-        enabled: true
-      show-details: "always"
   endpoints:
     web:
       exposure:
         include: "*"
-  metrics:
-    enable:
-      all: true
-  health:
-    livenessState:
-      enabled: true
-    readinessState:
-      enabled: true
+  endpoint:
+    health:
+      show-details: "always"
 
-#Para fazer com que TraceId e SpanId sejam exibidos no log
 logging.pattern.level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+client:
+  observability:
+    uri: http://localhost:8080
